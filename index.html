@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Entrada al Estadio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            text-align: center;
+            margin-top: 40px;
+            color: black;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+
+        .resultado {
+            width: 70%;
+            margin: 30px auto;
+            padding: 20px;
+            border: 2px solid #2980b9;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #3498db;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: blue;
+            color: white;
+        }
+
+        .resumen {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .bajo { color: red; }
+        .medio { color: orange; }
+        .lleno { color: green; }
+    </style>
+</head>
+<body>
+
+<h1>Control de Entrada al Estadio</h1>
+
+<script>
+   
+    const capacidadMaxima = 5; 
+    let personas = [];
+    let continuar = "si";
+    let numero = 1;
+
+    alert(" Bienvenido al Estadio Nacional");
+    alert("Capacidad máxima: " + capacidadMaxima + " personas");
+
+   
+    while (continuar.toLowerCase() === "si" && personas.length < capacidadMaxima) {
+        let nombre = prompt(`Ingrese el nombre de la persona #${numero}:`);
+        let edad = parseInt(prompt(`Ingrese la edad de ${nombre}:`));
+
+        if (!nombre || isNaN(edad) || edad <= 0) {
+            alert(" Datos inválidos. Intente nuevamente.");
+            continue;
+        }
+
+        let tipoEntrada;
+        let precio;
+
+        if (edad < 12) {
+            tipoEntrada = "Niño";
+            precio = 5000;
+        } else if (edad < 60) {
+            tipoEntrada = "Adulto";
+            precio = 10000;
+        } else {
+            tipoEntrada = "Adulto Mayor";
+            precio = 7000;
+        }
+
+        personas.push({ nombre, edad, tipoEntrada, precio });
+        alert(`${nombre} ha ingresado con éxito `);
+
+        if (personas.length >= capacidadMaxima) {
+            alert("🚫 Se alcanzó la capacidad máxima del estadio.");
+            break;
+        }
+
+        continuar = prompt("¿Desea registrar otra persona? (si/no)");
+        numero++;
+    }
+
+  
+    let totalNiños = 0, totalAdultos = 0, totalMayores = 0;
+    let totalRecaudado = 0;
+
+    for (let i = 0; i < personas.length; i++) {
+        if (personas[i].tipoEntrada === "Niño") totalNiños++;
+        if (personas[i].tipoEntrada === "Adulto") totalAdultos++;
+        if (personas[i].tipoEntrada === "Adulto Mayor") totalMayores++;
+        totalRecaudado += personas[i].precio;
+    }
+
+    let porcentaje = (personas.length / capacidadMaxima) * 100;
+    let estado;
+    let clase;
+
+    if (porcentaje < 50) {
+        estado = "Baja asistencia";
+        clase = "bajo";
+    } else if (porcentaje < 100) {
+        estado = "Asistencia media";
+        clase = "medio";
+    } else {
+        estado = "Estadio lleno";
+        clase = "lleno";
+    }
+
+    document.write('<div class="resultado">');
+    document.write('<h2>Resumen de Entradas</h2>');
+    document.write(`<p><strong>Capacidad máxima:</strong> ${capacidadMaxima}</p>`);
+    document.write(`<p><strong>Total de asistentes:</strong> ${personas.length}</p>`);
+    document.write('<h3>Lista de personas registradas</h3>');
+    document.write('<table>');
+    document.write('<tr><th>#</th><th>Nombre</th><th>Edad</th><th>Tipo de entrada</th><th>Precio</th></tr>');
+
+    for (let i = 0; i < personas.length; i++) {
+        document.write('<tr>');
+        document.write(`<td>${i + 1}</td>`);
+        document.write(`<td>${personas[i].nombre}</td>`);
+        document.write(`<td>${personas[i].edad}</td>`);
+        document.write(`<td>${personas[i].tipoEntrada}</td>`);
+        document.write(`<td>$${personas[i].precio.toLocaleString()}</td>`);
+        document.write('</tr>');
+    }
+
+    document.write('</table>');
+    document.write(`<p class="resumen">🎫 Niños: ${totalNiños} | Adultos: ${totalAdultos} | Adultos mayores: ${totalMayores}</p>`);
+    document.write(`<p><strong>Total recaudado:</strong> $${totalRecaudado.toLocaleString()}</p>`);
+    document.write(`<p class="resumen ${clase}"><strong>${estado}</strong></p>`);
+    document.write('</div>');
+</script>
+
+</body>
+</html>
